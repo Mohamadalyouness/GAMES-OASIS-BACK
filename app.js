@@ -1,27 +1,33 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import connect from './Config/db.js'
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser'
 import cors from 'cors'
 import { Server } from 'socket.io'
 import {createServer} from 'http'
+import auth from "./Routes/authRoutes.js"
+import Community from "./Routes/CommunityRoutes.js"
 dotenv.config()
 const app = express()
 //middlware to parse request body that doesn't contains files(multer will do parse the one contains files)
-// app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.urlencoded({extended:false}))
 //middleware to parse json objects
 app.use(express.json())
 //define images folder as static folder
-// app.use('/images',express.static('images'))
+// app.use("/assets", express.static('assets'));
 //Allow access from any origin
 app.use(cors())
 
-// app.use(cookieParser())
+app.use(cookieParser())
 
 app.use((req,res,next) => {
     console.log(`//${req.method} ${req.path} `);
     next()
 })
-
+//Routes 
+app.use('/api/community', Community);
+app.use('/api/', auth);
 
 //this middleware coonect to the mongodb atlas cluster, 'db_string' is the connection string
 await connect(process.env.CONNECTION_STRING)
