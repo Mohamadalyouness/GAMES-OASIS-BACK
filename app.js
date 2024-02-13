@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({extended:false}))
 //middleware to parse json objects
 app.use(express.json())
 //define images folder as static folder
-// app.use("/assets", express.static('assets'));
+app.use("/assets", express.static('assets'));
 //Allow access from any origin
 app.use(cors())
 

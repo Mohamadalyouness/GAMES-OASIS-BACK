@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 const authMiddleware = (req, res, next) => {
     const token = req.cookies.jwt;
     if (!token) {
-       return res.status(403).json({ error: 'No token provided' });
+       return res.status(403).json({ error: 'Please Sign in with the right role' });
     }
     try {
        const payload = jwt.verify(token, process.env.SECRET_KEY);

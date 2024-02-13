@@ -15,9 +15,9 @@ router.get('/', CommunityControllers.getAllCommunities);
 router.get('/:id',CommunityControllers.getCommunityById);
 
 // Route for updating a product by ID
-router.put('/:id',upload.single('images'),CommunityControllers.updateCommunity);
+router.patch('/:id',auth,upload.single('images'),CommunityControllers.updateCommunity);
 
 // Route for deleting a product by ID
-router.delete('/:id', CommunityControllers.deleteCommunity);
+router.delete('/:id',auth,CommunityControllers.deleteCommunity);
 
 export default router;
