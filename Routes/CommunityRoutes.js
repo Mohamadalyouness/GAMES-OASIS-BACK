@@ -19,5 +19,8 @@ router.patch('/:id',auth,upload.single('images'),CommunityControllers.updateComm
 
 // Route for deleting a product by ID
 router.delete('/:id',auth,CommunityControllers.deleteCommunity);
+//
+router.post('/:communityId/join',auth,CommunityControllers.joinCommunity);
+
 
 export default router;
