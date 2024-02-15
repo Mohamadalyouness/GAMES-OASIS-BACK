@@ -6,11 +6,8 @@ const router = express.Router();
 // Create a new chat message
 router.post('/:communityId', ChatControllers.createChatMessage);
 
-// Get all chat messages
-router.get('/', ChatControllers.getChatMessages);
-
 // Get a specific chat message by its ID
-router.get('/:id', ChatControllers.getChatMessageById);
+router.get('/:communityId', ChatControllers.getChatMessageById);
 
 // Update a chat message by its ID
 router.patch('/:id', ChatControllers.updateChatMessage);

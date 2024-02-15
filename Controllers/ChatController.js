@@ -25,26 +25,16 @@ export const createChatMessage = async (req, res) => {
         return res.status(500).json({ error: error.message });
       }
     };
-// Controller function to get all chat messages
-export const getChatMessages = async (req, res) => {
-  try {
-    const chatMessages = await ChatMessage.find();
-    res.status(200).json(chatMessages);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 // Controller function to get a specific chat message by its ID
 export const getChatMessageById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const chatMessage = await ChatMessage.findById(id);
-    if (!chatMessage)
-      return res.status(404).json({ message: "Chat message not found" });
-    res.status(200).json(chatMessage);
+    const { communityId  } = req.params;
+    const chatMessages = await ChatMessage.find({ community: communityId });
+    if (!chatMessages)
+      return res.status(404).json({ error: "Chat message not found" });
+    res.status(200).json(chatMessages);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 

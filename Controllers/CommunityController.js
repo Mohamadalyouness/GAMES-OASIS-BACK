@@ -1,7 +1,6 @@
 // controllers/ProductController.js
 import Community from "../Models/CommunityModel.js";
 import UserModel from "../Models/UserModel.js";
-// import ChatMessage from '../Models/ChatModel.js';
 export const joinCommunity = async (req, res) => {
   try {
     const { communityId } = req.params;
