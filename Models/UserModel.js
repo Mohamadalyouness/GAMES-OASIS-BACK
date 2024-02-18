@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
  email: { type: String, required: true },
  gamingName: { type: String, required: true },
  password: { type: String, required: true },
- role: { type: String, enum: ['admin', 'registered', 'unregistered'], default: 'unregistered' },
+ role: { type: String, enum: ['admin', 'registered'], default: 'registered' },
  Communities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Community' }] 
 });
 

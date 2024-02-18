@@ -3,28 +3,33 @@ import UserModel from "../Models/UserModel.js";
 import Community from "../Models/CommunityModel.js";
 // Controller function to create a new chat message
 export const createChatMessage = async (req, res) => {
-    try {
-        const { message } = req.body;
-        const userId = req.cookies.userId;
-    
-        // Retrieve the community ID from the route parameter
-        const { communityId } = req.params;
-    
-        // Create a new chat message
-        const chatMessage = new ChatMessage({
-          message,
-          senderId: userId,
-          community: communityId
-        });
-    
-        // Save the chat message
-        await chatMessage.save();
-    
-        return res.status(201).json(chatMessage);
-      } catch (error) {
-        return res.status(500).json({ error: error.message });
-      }
-    };
+  try {
+    const { message } = req.body;
+    const userId = req.cookies.userId;
+
+    // Check if userId is available
+    if (!userId) {
+      return res.status(401).json({ error: 'your are not signed in' });
+    }
+
+    // Retrieve the community ID from the route parameter
+    const { communityId } = req.params;
+
+    // Create a new chat message
+    const chatMessage = new ChatMessage({
+      message,
+      senderId: userId,
+      community: communityId
+    });
+
+    // Save the chat message
+    await chatMessage.save();
+
+    return res.status(201).json(chatMessage);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 // Controller function to get a specific chat message by its ID
 export const getChatMessageById = async (req, res) => {
   try {
