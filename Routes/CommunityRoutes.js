@@ -12,7 +12,7 @@ router.post('/',auth,upload.single('images'),CommunityControllers.createCommunit
 router.get('/', CommunityControllers.getAllCommunities);
 
 // Route for getting a single product by ID
-router.get('/:id',CommunityControllers.getCommunityById);
+router.get('/:userId',CommunityControllers.getAlluserCommunities);
 
 // Route for updating a product by ID
 router.patch('/:id',auth,upload.single('images'),CommunityControllers.updateCommunity);
@@ -20,7 +20,7 @@ router.patch('/:id',auth,upload.single('images'),CommunityControllers.updateComm
 // Route for deleting a product by ID
 router.delete('/:id',auth,CommunityControllers.deleteCommunity);
 //
-router.post('/:communityId/join',auth,CommunityControllers.joinCommunity);
+router.post('/:communityId/join',CommunityControllers.joinCommunity);
 
 
 export default router;

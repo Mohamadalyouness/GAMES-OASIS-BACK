@@ -1,27 +1,25 @@
 // controllers/ProductController.js
 import Community from "../Models/CommunityModel.js";
 import UserModel from "../Models/UserModel.js";
+
+
 export const joinCommunity = async (req, res) => {
   try {
     const { communityId } = req.params;
 
     // Check if user ID is available in cookies
-    const userId = req.cookies.userId;
+    const userId = req.body.userId;
+    
     if (!userId) {
       return res.status(403).json({ error: "Please sign up or sign in if you have an account" });
     }
 
     // Find the user by ID
-    const user = await UserModel.findById(userId);
+    let user = await UserModel.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-
-    // Check if the user is already registered
-    if (user.role === "unregistered") {
-      return res.status(403).json({ error: "Please sign up or sign in if you have an account" });
-    }
-
+    
     // Find the community by ID
     const community = await Community.findById(communityId);
     if (!community) {
@@ -42,6 +40,12 @@ export const joinCommunity = async (req, res) => {
     community.members.push(userId);
 
     await community.save();
+
+    // Add the community ID to the user's Communities array
+    user.Communities.push(communityId);
+
+    // Save the updated user document
+    await user.save();
 
     res.json({ message: "User joined the community successfully", community });
   } catch (error) {
@@ -97,17 +101,19 @@ export const getAllCommunities = async (req, res) => {
   }
 };
 
-export const getCommunityById = async (req, res) => {
+export const getAlluserCommunities = async (req, res) => {
   try {
-    const community = await Community.findById(req.params.id);
-    if (!community) {
-      return res.status(404).json({ error: "Product not found" });
-    }
-    res.json(community);
+    const { userId } = req.params;
+
+    // Find communities where the user ID is present in the members array
+    const communities = await Community.find({ members: userId });
+
+    res.json(communities);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 export const updateCommunity = async (req, res) => {
   // Check if user is admin

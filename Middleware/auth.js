@@ -1,18 +1,21 @@
 import jwt from "jsonwebtoken";
 
 const authMiddleware = (req, res, next) => {
-    const token = req.cookies.jwt;
+    // Extract the token from the request headers
+    const token = req.headers.authorization;
+
     if (!token) {
-        return res.status(403).json({ error: 'Please Sign in with the right role' });
+        return res.status(403).json({ error: 'Please provide a valid token' });
     }
     try {
-        const payload = jwt.verify(token, process.env.SECRET_KEY);
-        req.userId = payload.id;
-        req.userRole = payload.role;
+        // Remove the 'Bearer ' prefix from the token
+        const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.SECRET_KEY);
+        req.userId = decoded.id;
+        req.userRole = decoded.role;
 
         // Set the userRole in the cookies
-        res.cookie('userRole', payload.role, { httpOnly: false });
-        res.cookie('userId', payload.id, { httpOnly: false });
+        res.cookie('userRole', decoded.role, { httpOnly: false });
+        res.cookie('userId', decoded.id, { httpOnly: false });
 
         next();
     } catch (error) {
@@ -21,3 +24,4 @@ const authMiddleware = (req, res, next) => {
 };
 
 export default authMiddleware;
+

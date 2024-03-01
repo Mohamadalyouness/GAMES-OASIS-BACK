@@ -11,18 +11,21 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
+    // Send the token along with the user data in the response
     res.cookie("jwt", token, { httpOnly: true, maxAge: 3600000 });
     res.cookie("userRole", user.role, { httpOnly: false });
     res.cookie("userId", user.id, { httpOnly: false });
 
-    res.json({ role: user.role });
+    // Send the user and token in the response JSON
+    res.json({ token, user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 export const register = async (req, res) => {
   try {
@@ -62,7 +65,8 @@ export const getUsers = async (req, res) => {
       }
 
       if (decodedToken.role === "admin") {
-        User.find()
+        // Populate the Communities field for each user
+        User.find().populate('Communities')
           .then((users) => {
             res.json(users);
           })
@@ -80,38 +84,39 @@ export const getUsers = async (req, res) => {
 };
 
 export const getUserById = async (req, res) => {
-    const userId = req.params.id;
-    try {
-      const token = req.cookies.jwt;
+  try {
+      const token = req.headers.authorization;
+      console.log(token);
   
       // Check if token exists
       if (!token) {
-        return res.status(401).json({ error: "Unauthorized" });
+          return res.status(401).json({ error: "Unauthorized" });
       }
   
-      // Verify the token
-      jwt.verify(token, process.env.SECRET_KEY, async (err, decodedToken) => {
-        if (err) {
-          return res.status(401).json({ error: "Unauthorized" });
-        }
+      // Extract the token without the "Bearer " prefix
+      const tokenWithoutBearer = token.replace('Bearer ', '');
   
-        // Check if userRole is "admin"
-        if (decodedToken.role === "admin") {
-          // User is authorized, proceed with fetching the user by ID
-          const user = await User.findById(userId);
-          if (!user) {
-            return res.status(404).json({ error: "User not found" });
+      // Verify the token
+      jwt.verify(tokenWithoutBearer, process.env.SECRET_KEY, async (err, decodedToken) => {
+          if (err) {
+              return res.status(401).json({ error: "Unauthorized" });
           }
+  
+          // Proceed with fetching the user by ID
+          const userId = req.params.id;
+          const user = await User.findById(userId).populate('Communities');
+          if (!user) {
+              return res.status(404).json({ error: "User not found" });
+          }
+  
           res.json(user);
-        } else {
-          // User is not authorized
-          res.status(403).json({ error: "Access denied" });
-        }
       });
-    } catch (error) {
+  } catch (error) {
       res.status(500).json({ error: error.message });
-    }
-  };
+  }
+};
+
+
 
   export const deleteUser = async (req, res) => {
     const { id } = req.params;

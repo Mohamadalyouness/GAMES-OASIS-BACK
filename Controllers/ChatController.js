@@ -5,8 +5,8 @@ import Community from "../Models/CommunityModel.js";
 export const createChatMessage = async (req, res) => {
   try {
     const { message } = req.body;
-    const userId = req.cookies.userId;
-
+    const userId = req.body.senderId;
+    console.log(userId)
     // Check if userId is available
     if (!userId) {
       return res.status(401).json({ error: 'your are not signed in' });
@@ -15,10 +15,14 @@ export const createChatMessage = async (req, res) => {
     // Retrieve the community ID from the route parameter
     const { communityId } = req.params;
 
+    const userIdData = await UserModel.findById(userId)
+    // const userDataName = userIdData.userName
+    console.log("userIdData ",userIdData)
+
     // Create a new chat message
     const chatMessage = new ChatMessage({
       message,
-      senderId: userId,
+      senderId: userIdData,
       community: communityId
     });
 
@@ -33,10 +37,10 @@ export const createChatMessage = async (req, res) => {
 // Controller function to get a specific chat message by its ID
 export const getChatMessageById = async (req, res) => {
   try {
-    const { communityId  } = req.params;
+    const { communityId } = req.params;
     const chatMessages = await ChatMessage.find({ community: communityId });
     if (!chatMessages)
-      return res.status(404).json({ error: "Chat message not found" });
+      return res.status(404).json({ error: "Chat messages not found" });
     res.status(200).json(chatMessages);
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -23,10 +23,9 @@ UserSchema.methods.comparePassword = function (plaintextPassword) {
  return bcrypt.compare(plaintextPassword, this.password);
 };
 
-UserSchema.pre('find', function(next) {
-   this.populate('Communities'); 
-   next();
- });
+UserSchema.statics.findUserWithCommunities = function(query) {
+   return this.find(query).populate('Communities');
+ };
 
 const User = mongoose.model('User', UserSchema);
 export default User;
