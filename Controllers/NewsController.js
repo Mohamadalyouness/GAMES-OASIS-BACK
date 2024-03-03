@@ -60,8 +60,11 @@ export const updateNews = async (req, res) => {
 
 export const deleteNews = async (req, res) => {
   try {
+    // Get the user role from the headers
+    const userRole = req.headers.role;
+
     // Check if user is admin
-    if (req.userRole !== "admin") {
+    if (userRole !== "admin") {
       return res.status(403).json({ error: "Only admins can delete news" });
     }
 
@@ -74,3 +77,4 @@ export const deleteNews = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
