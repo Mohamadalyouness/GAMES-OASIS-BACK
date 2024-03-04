@@ -60,14 +60,6 @@ export const updateNews = async (req, res) => {
 
 export const deleteNews = async (req, res) => {
   try {
-    // Get the user role from the headers
-    const userRole = req.headers.role;
-
-    // Check if user is admin
-    if (userRole !== "admin") {
-      return res.status(403).json({ error: "Only admins can delete news" });
-    }
-
     const newsItem = await News.findByIdAndDelete(req.params.id);
     if (!newsItem) {
       return res.status(404).json({ error: "News not found" });

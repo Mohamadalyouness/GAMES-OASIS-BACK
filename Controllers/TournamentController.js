@@ -60,7 +60,7 @@ export const updateTournament = async (req, res) => {
 
 export const deleteTournament = async (req, res) => {
   try {
-    // Check if user is admin
+   
     if (req.userRole !== "admin") {
       return res
         .status(403)

@@ -6,7 +6,7 @@ const CommunitySchema = new mongoose.Schema({
   description: { type: String, required: true },
   images: [{ type: String }], 
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+  members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 }, { timestamps: true });
 
 CommunitySchema.pre('find', function(next) {
