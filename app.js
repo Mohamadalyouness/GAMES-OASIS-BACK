@@ -20,7 +20,9 @@ app.use(express.json())
 //define images folder as static folder
 app.use("/assets", express.static('assets'));
 //Allow access from any origin
-app.use(cors())
+app.use(cors({
+    origin: 'https://luxury-starlight-92755e.netlify.app'
+  }));
 
 app.use(cookieParser())
 
