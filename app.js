@@ -20,17 +20,20 @@ app.use(express.json())
 //define images folder as static folder
 app.use("/assets", express.static('assets'));
 //Allow access from any origin
-const allowedOrigins = ['https://65e5bf2d7122311bc34351e8--silver-quokka-ca9b3a.netlify.app', 'http://localhost:5173'];
-
-app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+const allowedOrigins = [
+    'https://65e5bf2d7122311bc34351e8--silver-quokka-ca9b3a.netlify.app',
+    'http://localhost:5173'
+  ];
+  
+  app.use(cors({
+    origin: function(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
     }
-  }
-}));
+  }));
 
 app.use(cookieParser())
 
