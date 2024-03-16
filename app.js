@@ -21,7 +21,7 @@ app.use(express.json())
 app.use("/assets", express.static('assets'));
 //Allow access from any origin
 const allowedOrigins = [
-    'https://65e5bf2d7122311bc34351e8--silver-quokka-ca9b3a.netlify.app',
+    'https://games-oasis-front-9o9ljg7ul-mohamadalyouness-projects.vercel.app',
     'http://localhost:5173'
   ];
   
