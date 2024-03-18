@@ -21,19 +21,19 @@ app.use(express.json())
 app.use("/assets", express.static('assets'));
 //Allow access from any origin
 const allowedOrigins = [
-    'https://games-oasis-front-9o9ljg7ul-mohamadalyouness-projects.vercel.app',
-    'http://localhost:5173'
-  ];
-  
-  app.use(cors({
-    origin: function(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
+  'https://games-oasis-front-9o9ljg7ul-mohamadalyouness-projects.vercel.app',
+  'http://localhost:5173'
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
-  }));
+  }
+}));
 
 app.use(cookieParser())
 
