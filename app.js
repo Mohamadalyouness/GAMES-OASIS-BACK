@@ -21,7 +21,7 @@ app.use(express.json())
 app.use("/assets", express.static('assets'));
 //Allow access from any origin
 const allowedOrigins = [
-  'https://games-oasis-front-9o9ljg7ul-mohamadalyouness-projects.vercel.app',
+  'https://games-oasis-front-git-main-mohamadalyouness-projects.vercel.app',
   'http://localhost:5173'
 ];
 
